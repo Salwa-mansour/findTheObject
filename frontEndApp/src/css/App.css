@@ -1,0 +1,23 @@
+.objects-list {
+    display: flex;
+    gap: .75rem;
+    justify-content: center;
+    margin: .75rem;
+}
+.objects-list li {
+    list-style: none;
+    height: 100px;
+}
+.objects-list img {
+    height: 100%;
+    width: auto;
+}
+
+.img-container {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}

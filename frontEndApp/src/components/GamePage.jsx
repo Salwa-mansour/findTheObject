@@ -1,11 +1,11 @@
-import OjbectsList from "./ObjectsList"
+import ObjectsList from "./ObjectsList"
 import Timer from "./timer"
 import Image1 from "./Image1"
 function GamePage() {
   return (
     <main className="game-page">
         <Timer />
-        <OjbectsList />
+        <ObjectsList />
         <Image1 />
     </main>
   )

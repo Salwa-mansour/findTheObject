@@ -1,7 +1,7 @@
 
 function timer() {
   return (
-    <section>
+    <section className="time-container">
         <time>00:00:00</time>
     </section>
   )

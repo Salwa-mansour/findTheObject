@@ -3,10 +3,22 @@
     gap: .75rem;
     justify-content: center;
     margin: .75rem;
+    flex-wrap: wrap;
 }
 .objects-list li {
     list-style: none;
     height: 100px;
+    position: relative;
+}
+.check-span{
+    position: absolute;
+    color: #ffffff;
+    background: #29c74270;
+    inset: 0;
+    text-align: center;
+    font-size: 3rem;
+    z-index:4 ;
+    visibility: hidden;
 }
 .objects-list img {
     height: 100%;
@@ -17,7 +29,51 @@
   display: flex;
   justify-content: center;
   position: relative;
+  /* display: inline-block; */
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
+}
+.img-container img {
+  width: 100%;
+  height: auto;
+}
+.time-container{
+    text-align: center;
+}
+
+.target-squier{
+    position: absolute;
+    width:3rem ;
+    height: 3rem;
+    border-radius: 50%;
+    border: 5px solid rgba(0, 0, 0, 0.867);
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    will-change: opacity, transform;
+}
+.object-dropdown{
+    position: absolute;
+    /* width: 20vw; */
+    top: 0;
+    left: 0;
+    max-width: 100px;
+    background: wheat;
+    display: flex;
+    flex-wrap: wrap;
+    opacity: .2;
+}
+.object-dropdown li{
+    padding: .25rem;
+    width: 50%;
+    font-size: .75rem;
+    position: relative;
+}
+.object-dropdown figure{
+    position: relative;
+}
+.object-dropdown img{
+    height: 50px;
 }

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-// import mainImg from '../assets/imageGroup1/findTheObject1_1.jpg';
 import TargetSquier from './TargetSquier';
 import ObjectsDropdown from './ObjectsDropdown';
 function Image1({level}) {

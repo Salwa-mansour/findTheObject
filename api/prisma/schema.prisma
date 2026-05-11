@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Level {
+  id            String         @id @default(uuid())
+  title         String
+  imageFileName      String         @map("image_file_name")
+  difficulty    String         @default("Easy")
+
+  // Relations
+  targets       SearchObject[]
+  sessions      PlayerSession[]
+
+  @@map("levels")
+}
+
+model SearchObject {
+  id        String   @id @default(uuid())
+  name      String
+  iconFileName   String   @map("icon_file_name")
+  targetX   Float    @map("target_x") // Percentage 0-100
+  targetY   Float    @map("target_y") // Percentage 0-100
+  radius    Float    @default(3.0)    // "Grace zone" percentage
+  
+  // Relations
+  levelId   String   @map("level_id")
+  level     Level    @relation(fields: [levelId], references: [id])
+
+  @@map("search_objects")
+}
+
+model PlayerSession {
+  id               String    @id @default(uuid())
+  playerName       String?   @map("player_name")
+  startTime        DateTime  @default(now()) @map("start_time")
+  endTime          DateTime? @map("end_time")
+  finalTimeSeconds Int?      @map("final_time_seconds")
+  // isWon            Boolean   @default(false) @map("is_won")
+
+  // Relations
+  levelId          String    @map("level_id")
+  level            Level     @relation(fields: [levelId], references: [id])
+
+  @@index([levelId, finalTimeSeconds]) // Optimization for Leaderboards
+  @@map("player_sessions")
+}

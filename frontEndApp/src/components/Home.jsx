@@ -3,11 +3,18 @@ import image1 from '../assets/imageGroup1/findTheObject1_1.jpg'; // Added file e
 import { Link } from 'react-router-dom'; // Ensure you have routing logic if using linkTo
 import GamePage from './GamePage';
 
-function Home() {
+function Home({ setCurrentLevel,levels }) {
   return (
-    <main className="home-page">    
-        <StartGameCard imgSrc={image1} linkTo={`/game/${1}`} />
-    </main>
+    <div className="level-select">
+      {levels.map(level => (
+        <div key={level.id} className="level-card">
+          <img src={level.mainImage} alt="" width={400} />
+          <h3>{level.title}</h3>
+          <p>Difficulty: {level.difficulty}</p>
+          <button onClick={() => setCurrentLevel(level)}>Start Level</button>
+        </div>
+      ))}
+    </div>
   );
 }
 

@@ -63,7 +63,7 @@
     background: wheat;
     display: flex;
     flex-wrap: wrap;
-    opacity: .2;
+    opacity: .4;
 }
 .object-dropdown li{
     padding: .25rem;

@@ -1,6 +1,6 @@
 
 function TargetSquier({position,show}) {
-   console.log(position);
+  
     const style = {
     opacity: show ? 1 : 0.5,
     pointerEvents: 'none',

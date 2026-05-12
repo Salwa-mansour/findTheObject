@@ -4,8 +4,8 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
- provider = "prisma-client-js"
-output   = "../data/generated/client"
+  provider = "prisma-client-js"
+  output   = "../data/generated/client"
 }
 
 datasource db {
@@ -13,29 +13,29 @@ datasource db {
 }
 
 model Level {
-  id            String         @id @default(uuid())
+  id            String @id @default(uuid())
   title         String
-  imageFileName      String         @map("image_file_name")
-  difficulty    String         @default("Easy")
+  imageFileName String @map("image_file_name")
+  difficulty    String @default("Easy")
 
   // Relations
-  targets       SearchObject[]
-  sessions      PlayerSession[]
+  targets  SearchObject[]
+  sessions PlayerSession[]
 
   @@map("levels")
 }
 
 model SearchObject {
-  id        String   @id @default(uuid())
-  name      String
-  iconFileName   String   @map("icon_file_name")
-  targetX   Float    @map("target_x") // Percentage 0-100
-  targetY   Float    @map("target_y") // Percentage 0-100
-  radius    Float    @default(3.0)    // "Grace zone" percentage
-  
+  id           String @id @default(uuid())
+  name         String
+  iconFileName String @map("icon_file_name")
+  targetX      Float  @map("target_x") // Percentage 0-100
+  targetY      Float  @map("target_y") // Percentage 0-100
+  radius       Float  @default(3.0) // "Grace zone" percentage
+
   // Relations
-  levelId   String   @map("level_id")
-  level     Level    @relation(fields: [levelId], references: [id])
+  levelId String @map("level_id")
+  level   Level  @relation(fields: [levelId], references: [id])
 
   @@map("search_objects")
 }
@@ -49,8 +49,8 @@ model PlayerSession {
   // isWon            Boolean   @default(false) @map("is_won")
 
   // Relations
-  levelId          String    @map("level_id")
-  level            Level     @relation(fields: [levelId], references: [id])
+  levelId String @map("level_id")
+  level   Level  @relation(fields: [levelId], references: [id])
 
   @@index([levelId, finalTimeSeconds]) // Optimization for Leaderboards
   @@map("player_sessions")

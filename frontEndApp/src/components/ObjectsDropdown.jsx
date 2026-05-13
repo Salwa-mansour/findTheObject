@@ -1,7 +1,4 @@
-// import booksImg from '../assets/imageGroup1/books.jpg'
-// import catImg from '../assets/imageGroup1/cat.jpg'
-// import flowersImg from '../assets/imageGroup1/flowers.jpg'
-// import materImg from '../assets/imageGroup1/mater.jpg'
+
 
 function ObjectsDropdown({images,position,show,setShow}) {
     // console.log(`show dropdown ${show}`);
@@ -31,7 +28,7 @@ function ObjectsDropdown({images,position,show,setShow}) {
             images.map(image => (
                 <li key={image.id}>
                     <figure>
-                        <img src={image.icon} alt={image.name} />
+                        <img src={image.iconPath} alt={image.name} />
                         <figcaption>{image.name}</figcaption>
                         <span className='check-span'>✔</span>  
                     </figure>

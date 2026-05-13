@@ -5,7 +5,7 @@ function ObjectsList({images}) {
       {
         images.map(image => (
           <li key={image.id}>
-            <img src={image.icon} alt={image.name} /> 
+            <img src={image.iconPath} alt={image.name} /> 
             <span className='check-span'>✔</span>
           </li>
         ))

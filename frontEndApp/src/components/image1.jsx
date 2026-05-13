@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import TargetSquier from './TargetSquier';
 import ObjectsDropdown from './ObjectsDropdown';
+
+
 function Image1({level}) {
 
   const [coords, setCoords] = useState({ x: 0, y: 0 });
@@ -35,7 +37,7 @@ function Image1({level}) {
       onMouseEnter={() => setShowCursor(true)}
       onMouseLeave={() => setShowCursor(false)}
     >
-        <img src={level.mainImage} alt="find items" />
+        <img src={level.imagePath} alt="find items" />
        
         <TargetSquier  position ={coords} show ={showCursor}/>
        

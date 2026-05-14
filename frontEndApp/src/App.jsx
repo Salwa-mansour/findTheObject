@@ -7,6 +7,7 @@ import { getImagePath } from './config/constants.js';
 
 function App() {
   const [currentLevel, setCurrentLevel] = useState(null);
+  const [currentSession, setCurrentSession] = useState(null);
   const [levels, setLevels] = useState([]);
   const [loading, setLoading] = useState(true); // Added a loading state
 
@@ -44,7 +45,7 @@ function App() {
   return (
     <>
       {!currentLevel ? (
-        <Home setCurrentLevel={setCurrentLevel} levels={levels} />
+        <Home setCurrentLevel={setCurrentLevel} levels={levels} setCurrentSession={setCurrentSession}  />
       ) : (
         <GamePage level={currentLevel} onQuit={() => setCurrentLevel(null)} />
       )}

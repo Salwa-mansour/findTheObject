@@ -9,7 +9,17 @@ async function getLevelList(req, res) {
         res.status(400).json({ error: 'Failed to fetch levels' });
     }   
 }
-
+async function createSession(req, res) {
+    const { levelId } = req.body;
+    try {
+        const session = await db.generateSesstion(levelId);
+        res.status(200).json(session);
+    } catch (error) {
+        console.error('Error creating session:', error);
+        res.status(400).json({ error: 'Failed to create session' });
+    }
+}
 module.exports = {
     getLevelList,
+    createSession,
 };

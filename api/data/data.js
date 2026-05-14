@@ -18,6 +18,16 @@ async function getLevels() {
     return levels;
 }
 
+async function generateSesstion(levelId) {
+        const session = await prisma.PlayerSession.create({
+            data: {
+                levelId: levelId,    
+            },
+        });
+        return session;
+}
+
 module.exports = {
     getLevels,
+    generateSesstion,
 };

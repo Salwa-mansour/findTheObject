@@ -4,6 +4,6 @@ import levelController from "../controllers/levelController.js";
 
 const levelRouter = express.Router();
 
-levelRouter.get('/',levelController.getLevelList);
-
+levelRouter.get('/levels',levelController.getLevelList);
+levelRouter.post('/startGame', levelController.createSession);
 export default levelRouter;

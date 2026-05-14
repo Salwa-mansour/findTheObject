@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
-app.use("/levels", levelRouter);
+app.use("/", levelRouter);
 
 // The Global Error Middleware
 app.use((err, req, res, next) => {

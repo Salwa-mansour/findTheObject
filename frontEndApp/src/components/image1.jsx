@@ -9,6 +9,8 @@ function Image1({level}) {
   const [dropDownPosition, setDropDownPosition] = useState({ x: 0, y: 0 });
   const [showDropdown, setShowDropdown] = useState(false);
   const [showCursor, setShowCursor] = useState(false);
+  const [foundTargets, setFoundTargets] = useState([]);
+
   function mouseMoveHandler(e) {
  const rect = e.currentTarget.getBoundingClientRect();
   
@@ -45,7 +47,9 @@ function Image1({level}) {
         images={level.targets}
          position={dropDownPosition} 
         show={showDropdown}
-         setShow={setShowDropdown} />
+         setShow={setShowDropdown}
+         foundTargets={foundTargets}
+         setFoundTargets={setFoundTargets} />
     </section>
      </>
   )

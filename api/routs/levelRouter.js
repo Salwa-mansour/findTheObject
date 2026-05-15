@@ -6,4 +6,5 @@ const levelRouter = express.Router();
 
 levelRouter.get('/levels',levelController.getLevelList);
 levelRouter.post('/startGame', levelController.createSession);
+levelRouter.post('/checkHit', levelController.checkPointHit);
 export default levelRouter;

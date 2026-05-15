@@ -47,7 +47,7 @@ function App() {
       {!currentLevel ? (
         <Home setCurrentLevel={setCurrentLevel} levels={levels} setCurrentSession={setCurrentSession}  />
       ) : (
-        <GamePage level={currentLevel} onQuit={() => setCurrentLevel(null)} />
+        <GamePage level={currentLevel} currentSession={currentSession} onQuit={() => setCurrentLevel(null)} />
       )}
     </>
   );

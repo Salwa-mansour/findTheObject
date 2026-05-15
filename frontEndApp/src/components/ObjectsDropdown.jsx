@@ -1,6 +1,6 @@
 
-
-function ObjectsDropdown({images,position,show,setShow}) {
+import axios from "axios";
+function ObjectsDropdown({images,position,show,setShow,foundTargets,setFoundTargets}) {
     // console.log(`show dropdown ${show}`);
     const style = {
         opacity: show ? 1 : 0.4,
@@ -10,7 +10,8 @@ function ObjectsDropdown({images,position,show,setShow}) {
         transform: 'translate(0,1.5rem)', 
         zIndex: 20, 
     };
-    function handleClick() {
+    function handleClick(e) {
+        console.log(e.target);
         setShow(false);
     }
   return (
@@ -27,7 +28,7 @@ function ObjectsDropdown({images,position,show,setShow}) {
         {
             images.map(image => (
                 <li key={image.id}>
-                    <figure>
+                    <figure >
                         <img src={image.iconPath} alt={image.name} />
                         <figcaption>{image.name}</figcaption>
                         <span className='check-span'>✔</span>  

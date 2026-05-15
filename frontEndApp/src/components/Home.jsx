@@ -7,14 +7,14 @@ import axios from 'axios';
 function Home({ setCurrentLevel,levels,setCurrentSession }) {
 
   async function generateSesstion(currentLevel) {
-    console.log(currentLevel);
+   
     try {
       const response = await axios.post('http://localhost:3000/startGame', {
         levelId: currentLevel.id,
         // You can include additional data here if needed
       });
       const sessionData = response.data;
-      console.log('Session created:', sessionData);
+    
       setCurrentSession(sessionData); // Store session data in state
       // You can now use sessionData for further actions, such as navigating to the game page
     } catch (error) {

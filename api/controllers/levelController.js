@@ -20,16 +20,18 @@ async function createSession(req, res) {
     }
 }
 async function checkPointHit(req, res) {
-    const { levelId, xPoint, yPoint } = req.body;
+    const { possipleTargetId, xPoint, yPoint } = req.body;
     try {   
-        const targets = await db.getTargets( levelId);
-
-        for (const target of targets) {
-            const distance = Math.sqrt((xPoint - target.targetX) ** 2 + (yPoint - target.targetY) ** 2);    
+        const target = await db.getTarget( possipleTargetId);
+            console.log('Target:', target);
+            console.log(`xPoint: ${xPoint}, yPoint: ${yPoint}`);
+      
+            const distance = Math.sqrt((xPoint - target.targetX) ** 2 + (yPoint - target.targetY) ** 2); 
+            console.log(`Calculated distance: ${distance}, Target radius: ${target.radius}`);   
             if (distance <= target.radius) {
-                return res.status(200).json({ hit: true, targetId: target.id });
+                return res.status(200).json({ hit: true, target: target });
             }
-        }
+       
 
        return res.status(200).json({ hit: false });
        

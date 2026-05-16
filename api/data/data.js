@@ -26,17 +26,18 @@ async function generateSesstion(levelId) {
         });
         return session;
 }
-async function getTargets(levelId) {
-    const targets = await prisma.SearchObject.findMany({
+
+async function getTarget(targetId) {
+   const target = await prisma.SearchObject.findUnique({
         where: {
-            levelId: levelId,   
-        }
+            id: targetId,
+        },
     });
-    return targets;
+    return target;
 }
 
 module.exports = {
     getLevels,
     generateSesstion,
-    getTargets,
+    getTarget,
 };

@@ -3,7 +3,7 @@ import TargetSquier from './TargetSquier';
 import ObjectsDropdown from './ObjectsDropdown';
 import ObjectsList from './ObjectsList';
 
-function Image1({level}) {
+function Image1({level,currentSession}) {
 
   const [coords, setCoords] = useState({ x: 0, y: 0 });
   const [dropDownPosition, setDropDownPosition] = useState({ x: 0, y: 0 });
@@ -52,7 +52,8 @@ function Image1({level}) {
         show={showDropdown}
          setShow={setShowDropdown}
          foundTargets={foundTargets}
-         setFoundTargets={setFoundTargets} />
+         setFoundTargets={setFoundTargets}
+         currentSession={currentSession} />
     </section>
      </>
   )

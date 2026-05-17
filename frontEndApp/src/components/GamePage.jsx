@@ -10,7 +10,7 @@ function GamePage({level,currentSession,onQuit}) {
     <main className="game-page">
         <Timer start={currentSession.startTime} />
         {/* <ObjectsList images={level.targets} /> */}
-        <Image1 level={level} />
+        <Image1 level={level} currentSession={currentSession} />
     </main>
   )
 }

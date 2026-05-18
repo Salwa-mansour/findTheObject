@@ -1,42 +1,35 @@
-
 import axios from "axios";
+import { formatTime } from '../utils/formatTime.js';
 
-function ObjectsDropdown({images,position,show,setShow,foundTargets,setFoundTargets,currentSession}) {
-    // console.log(`show dropdown ${show}`);
+function ObjectsDropdown({ images, position, show, setShow, foundTargets, setFoundTargets, currentSession, setCurrentSession }) {
+    
     const style = {
         opacity: show ? 1 : 0.4,
-        PointerEvent: show ? 'auto' : 'none',
+        pointerEvents: show ? 'auto' : 'none',
         top: `${position.y}%`,  
         left: `${position.x}%`,
         transform: 'translate(0,1.5rem)', 
         zIndex: 20, 
     };
-function handleClick(targetId) {
-    
+
+    function handleClick(targetId) {
         const data = { 
             possipleTargetId: targetId,
             xPoint: position.x,
             yPoint: position.y
         };
 
-        // Standard clean promise handling syntax
         axios.post('http://localhost:3000/checkHit', data)
             .then(response => {
-                // Fixed spelling: match target across both lines
                 const { hit, target } = response.data; 
-                console.log(JSON.stringify(response.data));
-               if (hit) {
-                    // 1. Update the state for the UI
+              
+                if (hit) {
                     setFoundTargets(prev => {
                         const updatedTargets = [...prev, target];
                         
-                        // 2. Check the game-over condition using the newly updated array length
                         if (updatedTargets.length === images.length) {
-                            // Using a tiny timeout prevents the alert from blocking the final checkmark render
                             setTimeout(() => {
-                                
-                                handleWin(currentSession.id); // Record the win in the backend
-                                alert('Congratulations! You found all targets!');
+                                handleWin(currentSession.id); 
                             }, 100);
                         }
                         
@@ -48,47 +41,69 @@ function handleClick(targetId) {
                 console.error('Error validating target:', error);
             });
         
-        // Hide dropdown immediately to give snappy UI feedback
         setShow(false);
-      
     }
 
-function handleWin(sessionId) {
-    axios.post('http://localhost:3000/endGame', { sessionId })
-        .then(response => {
-            console.log('Win recorded:', response.data);
-            console.log(currentSession);
-        })
-        .catch(error => {
-            console.error('Error recording win:', error);
-        });
-}
-  return (
- 
-        <ul className='object-dropdown' style={style} >
-          
-        {
-            images.map(image => {
-                const isFound = foundTargets.some(target => target.id === image.id);
-              return(
-                 <li key={image.id} onClick={isFound ? null : () => handleClick(image.id)}
-                 style={ 
-                       { pointerEvents: isFound ? 'none' : 'auto', 
-                        cursor: isFound ? 'default' : 'pointer'}
-                  }
-                 >
-                    <figure >
-                        <img src={image.iconPath} alt={image.name} />
-                        <figcaption>{image.name}</figcaption>
-                      {isFound && <span className='check-span'>✔</span>}
-                    </figure>
-                </li>
-                ) 
-  })
+    // Switched to async/await syntax for cleaner nested API call handling
+    async function handleWin(sessionId) {
+        try {
+            // 1. Tell backend to stop the clock and record the end time
+            const endResponse = await axios.post('http://localhost:3000/endGame', { sessionId });
+            console.log('Win recorded:', endResponse.data);
+            
+            // Immediately update local state copy with raw end time finalTimeSeconds metadata
+            setCurrentSession(endResponse.data);
+
+            // FIX: Use 'finalTimeSeconds' (matching your Prisma backend layer) instead of finalTimeSeconds
+            const msElapsed = endResponse.data.finalTimeSeconds || 0;
+            const secondsElapsed = msElapsed / 1000;
+            const scoreTimeString = formatTime(secondsElapsed);
+              
+            const playerName = prompt(
+                `Congratulations! You found all targets in ${scoreTimeString}!\n\nPlease enter your name to join the leaderboard:`, 
+                ""
+            );
+
+            // Only fire the save route if the user didn't hit cancel or submit an empty string
+            if (playerName && playerName.trim() !== "") {
+                console.log(`Saving leaderboard score for: ${playerName}`);
+                
+                // 2. Fire dependent call to save the user profile identifier string
+                const leaderboardResponse = await axios.post('http://localhost:3000/savePlayerName', {
+                    name: playerName.trim(),
+                    sessionId: sessionId,
+                });
+                
+                console.log('Leaderboard updated:', leaderboardResponse.data);
+                setCurrentSession(leaderboardResponse.data); 
+            }
+        } catch (error) {
+            console.error('Error handling endgame transaction sequence:', error);
         }
+    }
+
+    return (
+        <ul className='object-dropdown' style={style}>
+            {images.map(image => {
+                const isFound = foundTargets.some(target => target.id === image.id);
+                return (
+                    <li key={image.id} 
+                        onClick={isFound ? null : () => handleClick(image.id)}
+                        style={{ 
+                            pointerEvents: isFound ? 'none' : 'auto', 
+                            cursor: isFound ? 'default' : 'pointer'
+                        }}
+                    >
+                        <figure>
+                            <img src={image.iconPath} alt={image.name} />
+                            <figcaption>{image.name}</figcaption>
+                            {isFound && <span className='check-span'>✔</span>}
+                        </figure>
+                    </li>
+                );
+            })}
         </ul>
- 
-  )
+    );
 }
 
-export default ObjectsDropdown
+export default ObjectsDropdown;

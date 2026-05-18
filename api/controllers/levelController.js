@@ -40,20 +40,47 @@ async function checkPointHit(req, res) {
         res.status(400).json({ error: 'Failed to check point hit' });
     }
 }
-function endSession(req, res) {
+async function endSession(req, res) {
     const { sessionId } = req.body;
+    if (!sessionId) {
+        return res.status(400).json({ error: 'Missing sessionId parameter' });
+    }
     try {
-        const session = db.endSession(sessionId);
-        console.log('Session ended:', session);
+        const session =await db.endSession(sessionId);
+     
         res.status(200).json(session);
     } catch (error) {
         console.error('Error ending session:', error);
         res.status(400).json({ error: 'Failed to end session' });
     }
 }
+async function sesstionPalyerName(req, res) {
+    const { sessionId, playerName } = req.body;
+    if (!sessionId || !playerName) {
+        return res.status(400).json({ error: 'Missing sessionId or playerName parameter' });
+    }
+    try {   
+        const session = await db.sesstionPalyerName(sessionId, playerName);
+        res.status(200).json(session);
+    } catch (error) {
+        console.error('Error updating player name:', error);
+        res.status(400).json({ error: 'Failed to update player name' });
+    }
+}
+async function leaderboard(req, res) {
+    try { 
+        const leaderboardData = await db.leaderboard();
+        res.status(200).json(leaderboardData);
+    } catch (error) {
+        console.error('Error fetching leaderboard:', error);
+        res.status(400).json({ error: 'Failed to fetch leaderboard' });
+    }   
+}
 module.exports = {
     getLevelList,
     createSession,
     checkPointHit,
-    endSession
+    endSession,
+    sesstionPalyerName,
+    leaderboard,
 };

@@ -68,9 +68,45 @@ async function endSession(sessionId) { // Fixed spelling to 'Session'
         throw error; // Re-throw to handle inside your Express controller wrapper
     }
 }
+async function sesstionPalyerName(sessionId, playerName) {
+    try {
+        const updatedSession = await prisma.PlayerSession.update({
+            where: { id: sessionId },
+            data: {
+                playerName: playerName,
+            },
+        });
+        return updatedSession;
+    } catch (error) {
+        console.error("Error in sesstionPalyerName data layer:", error);
+        throw error; // Re-throw to handle inside your Express controller wrapper
+    }
+}
+
+async function leaderboard() {
+    try {
+        const leaderboardData = await prisma.PlayerSession.findMany({
+            where: {
+                playerName: {
+                    not: null, // Only include sessions where playerName is set
+                },
+            },
+            orderBy: {
+                finalTimeSeconds: 'asc', // Assuming you want the fastest times at the top
+            },
+            take: 10, // Limit to top 10 entries
+        });
+        return leaderboardData;
+    } catch (error) {
+        console.error("Error fetching leaderboard data:", error);
+        throw error; // Re-throw to handle inside your Express controller wrapper
+    }
+}
 module.exports = {
     getLevels,
     generateSesstion,
     getTarget,
-    endSession
+    endSession,
+    sesstionPalyerName,
+    leaderboard,
 };

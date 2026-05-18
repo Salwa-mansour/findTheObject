@@ -70,7 +70,7 @@ function ObjectsDropdown({ images, position, show, setShow, foundTargets, setFou
                 
                 // 2. Fire dependent call to save the user profile identifier string
                 const leaderboardResponse = await axios.post('http://localhost:3000/savePlayerName', {
-                    name: playerName.trim(),
+                    playerName: playerName.trim(),
                     sessionId: sessionId,
                 });
                 

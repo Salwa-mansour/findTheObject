@@ -56,6 +56,7 @@ async function endSession(req, res) {
 }
 async function sesstionPalyerName(req, res) {
     const { sessionId, playerName } = req.body;
+  
     if (!sessionId || !playerName) {
         return res.status(400).json({ error: 'Missing sessionId or playerName parameter' });
     }

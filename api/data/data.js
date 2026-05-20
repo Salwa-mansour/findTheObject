@@ -1,4 +1,4 @@
-const prisma = require('./connection');
+import prisma from './connection'
 
 async function getLevels() {
     const levels = await prisma.level.findMany({

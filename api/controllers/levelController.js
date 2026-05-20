@@ -1,4 +1,4 @@
-const db = require('../data/data');
+import db from '../db.js';
 
 async function getLevelList(req, res) {
     try {

@@ -1,5 +1,6 @@
 
-const prisma = require('../data/connection');
+// const prisma = require('../data/connection');
+import prisma from '../data/connection';
 
 async function main() {
   console.log('Start seeding...');

@@ -1,5 +1,5 @@
 import express from "express";
-import levelController from "../controllers/levelController.js";
+import * as levelController from "../controllers/levelController.js";
 
 const levelRouter = express.Router();
 

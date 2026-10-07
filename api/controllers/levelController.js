@@ -1,4 +1,4 @@
-import db from '../db.js';
+import * as db from '../data/data.js';
 
 async function getLevelList(req, res) {
     try {
@@ -77,7 +77,7 @@ async function leaderboard(req, res) {
         res.status(400).json({ error: 'Failed to fetch leaderboard' });
     }   
 }
-module.exports = {
+export {
     getLevelList,
     createSession,
     checkPointHit,

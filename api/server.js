@@ -1,10 +1,32 @@
+
 import express from "express";
+import dotenv from 'dotenv';
+dotenv.config();
 import cors from "cors";
 import levelRouter from "./routs/levelRouter.js";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+const allowedOrigins = process.env.NODE_ENV === 'production'
+    ? [process.env.PRODUCTION_CLIENT]
+    : [process.env.DEVELOPMENT_CLIENT];
+
+const corsOptions = {
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true, 
+    optionsSuccessStatus: 200,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+};
+
+app.use(cors(corsOptions));
+
 app.use(express.json());
 app.use("/", levelRouter);
 

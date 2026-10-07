@@ -19,7 +19,7 @@ function ObjectsDropdown({ images, position, show, setShow, foundTargets, setFou
             yPoint: position.y
         };
 
-        axios.post('http://localhost:3000/checkHit', data)
+        axios.post(`${import.meta.env.VITE_API_URL}/checkHit`, data)
             .then(response => {
                 const { hit, target } = response.data; 
               
@@ -48,7 +48,7 @@ function ObjectsDropdown({ images, position, show, setShow, foundTargets, setFou
     async function handleWin(sessionId) {
         try {
             // 1. Tell backend to stop the clock and record the end time
-            const endResponse = await axios.post('http://localhost:3000/endGame', { sessionId });
+            const endResponse = await axios.post(`${import.meta.env.VITE_API_URL}/endGame`, { sessionId });
             console.log('Win recorded:', endResponse.data);
             
             // Immediately update local state copy with raw end time finalTimeSeconds metadata
@@ -69,7 +69,7 @@ function ObjectsDropdown({ images, position, show, setShow, foundTargets, setFou
                 console.log(`Saving leaderboard score for: ${playerName}`);
                 
                 // 2. Fire dependent call to save the user profile identifier string
-                const leaderboardResponse = await axios.post('http://localhost:3000/savePlayerName', {
+                const leaderboardResponse = await axios.post(`${import.meta.env.VITE_API_URL}/savePlayerName`, {
                     playerName: playerName.trim(),
                     sessionId: sessionId,
                 });

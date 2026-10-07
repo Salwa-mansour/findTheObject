@@ -14,7 +14,7 @@ function App() {
   useEffect(() => {
     const fetchAndProcessLevels = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/levels');
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/levels`);
         const data = response.data;
 
         // Transform the data AFTER it arrives

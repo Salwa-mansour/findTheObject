@@ -1,6 +1,3 @@
-import StartGameCard from './StartGameCard'; // Fixed typo in 'components'
-import { Link } from 'react-router-dom'; // Ensure you have routing logic if using linkTo
-import GamePage from './GamePage';
 import axios from 'axios';
 
 
@@ -9,7 +6,7 @@ function Home({ setCurrentLevel,levels,setCurrentSession }) {
   async function generateSesstion(currentLevel) {
    
     try {
-      const response = await axios.post('http://localhost:3000/startGame', {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/startGame`, {
         levelId: currentLevel.id,
         // You can include additional data here if needed
       });

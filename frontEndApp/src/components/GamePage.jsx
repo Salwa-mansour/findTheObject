@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import ObjectsList from "./ObjectsList";
-import Timer from "./timer";
+import Timer from "./Timer";
 import Image1 from "./Image1";
 import axios from "axios";
 import { formatTime } from "../utils/formatTime";
@@ -17,7 +17,7 @@ function GamePage({ level, currentSession, setCurrentSession, onQuit }) {
   useEffect(() => {
     if (isGameOver) {
       setLoadingLeaderboard(true);
-      axios.get('http://localhost:3000/leaderboard')
+      axios.get(`${import.meta.env.VITE_API_URL}/leaderboard`)
         .then(response => {
           console.log('Leaderboard data:', response.data);
           setLeaderboard(response.data);

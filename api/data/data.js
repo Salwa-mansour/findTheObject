@@ -1,4 +1,4 @@
-import prisma from './connection'
+import prisma from './connection.js'
 
 async function getLevels() {
     const levels = await prisma.level.findMany({
@@ -102,7 +102,7 @@ async function leaderboard() {
         throw error; // Re-throw to handle inside your Express controller wrapper
     }
 }
-module.exports = {
+export  {
     getLevels,
     generateSesstion,
     getTarget,

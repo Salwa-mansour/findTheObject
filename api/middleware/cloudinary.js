@@ -15,8 +15,9 @@ export const  generateUploadSignture =catchAsync(async (req, res, next) => {
     // Handing Cloudinary a folder name keeps your storage organized.
     const paramsToSign = {
       timestamp: timestamp,
-      folder: 'mini-social-avatars', 
-      transformation: 'w_400,c_limit', // Limits width to 400px, preserves aspect ratio
+      folder: 'findTheObject', 
+      use_filename: true,       
+      unique_filename: false,    
     };
 
     // Generate the signature using your API Secret hidden on the server

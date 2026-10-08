@@ -6,25 +6,29 @@ export async function uploadImageToCloudinary(imageFile) {
   }
 
   try {
-    // STEP 1: Request upload credentials and signature from your backend
-    const sigResponse = await axios.get(`${import.meta.env.VITE_API_URL}/levelcontroll/generate-upload-signatu`);
+    // 1. Get signature and credentials from your backend
+    const sigResponse = await axios.get(`${import.meta.env.VITE_API_URL}/levelcontroll/generate-upload-signature`);
     const { signature, timestamp, apiKey, cloudName } = sigResponse.data;
     
-    // STEP 2: Package the file and cryptographic credentials into FormData
+    // 2. Package the file and cryptographic credentials into FormData
     const formData = new FormData();
     formData.append('file', imageFile);
     formData.append('api_key', apiKey);
     formData.append('timestamp', timestamp);
     formData.append('signature', signature);
-    formData.append('folder', 'findTheObject'); 
-
-    // STEP 3: Send file directly to Cloudinary
+    formData.append('folder', 'findTheObject');
+// TELL CLOUDINARY TO KEEP THE ORIGINAL FILENAME:
+    formData.append('use_filename', 'true');
+    formData.append('unique_filename', 'false');
+    
+    // 3. Send file directly to Cloudinary
     const cloudResponse = await axios.post(
       `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
       formData
     );
 
-    return cloudResponse.data.secure_url;
+    // 4. Return only the public_id (e.g., "findTheObject/xyz123") instead of the secure_url
+    return cloudResponse.data.public_id; 
   } catch (error) {
     console.error("Cloudinary upload failed:", error.response?.data || error.message);
     throw error;

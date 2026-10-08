@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import cors from "cors";
 import levelRouter from "./routs/levelRouter.js";
+import controlePanelRouter from "./routs/controlePanelRouter.js"
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -29,6 +30,7 @@ app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use("/", levelRouter);
+app.use("/levelcontroll",controlePanelRouter)
 
 // The Global Error Middleware
 app.use((err, req, res, next) => {

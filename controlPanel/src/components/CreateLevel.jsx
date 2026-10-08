@@ -127,7 +127,7 @@ function CreateLevel() {
       );
 
       // 3. Send complete level structure to your backend database
-      await axios.post(`${import.meta.env.VITE_API_URL}/levelcontroll/create`, {
+   const response =   await axios.post(`${import.meta.env.VITE_API_URL}/levelcontroll/create`, {
         title,
         difficulty,
         imageFileName,
@@ -135,6 +135,7 @@ function CreateLevel() {
       });
 
       alert('Level and targets created successfully!');
+      console.log(response.data)
     } catch (error) {
       console.error('Error creating level:', error);
       alert('Failed to create level. Check console.');
@@ -222,7 +223,7 @@ function CreateLevel() {
           top: `${t.targetY}%`,
           // We multiply the radius value to scale nicely on the preview
           width: `${radiusVal * 6}%`, 
-          height: `${radiusVal * 6}%`,
+          aspectRatio: `1`,
           backgroundColor: isActive ? 'rgba(255, 0, 85, 0.2)' : 'rgba(0, 255, 204, 0.2)',
           border: `2px dashed ${isActive ? '#ff0055' : '#00ffcc'}`,
           borderRadius: '50%',

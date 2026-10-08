@@ -4,16 +4,15 @@ import * as levelService from '../data/controllPanelData.js'; // Assuming your s
 
 // Handler to create a new level
 export const createNewLevel = catchAsync(async (req, res, next) => {
-    console.log(req.body);
-    return;
-    // const createdLevel = await levelService.createLevel(req.body);
+   
+    const createdLevel = await levelService.createLevel(req.body);
     
-    // res.status(201).json({
-    //     status: 'success',
-    //     data: {
-    //         level: createdLevel
-    //     }
-    // });
+    res.status(201).json({
+        status: 'success',
+        data: {
+            level: createdLevel
+        }
+    });
 });
 
 // Optional: Handler to get all levels if you have it in your services

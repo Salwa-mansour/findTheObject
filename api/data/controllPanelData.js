@@ -2,7 +2,7 @@ import prisma from './connection.js'
 
 async function createLevel(levelData) {
     const { title, difficulty, imageFileName, targets } = levelData;
-
+console.log(levelData)
     // Prisma can create the Level and all its related SearchObjects in one go!
     const newLevel = await prisma.level.create({
         data: {

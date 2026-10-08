@@ -10,7 +10,6 @@ function Image1({level,currentSession,setCurrentSession}) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showCursor, setShowCursor] = useState(false);
   const [foundTargets, setFoundTargets] = useState([]);
-
   function mouseMoveHandler(e) {
  const rect = e.currentTarget.getBoundingClientRect();
   

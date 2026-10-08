@@ -1,23 +1,63 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router';
 import axios from 'axios';
 import { uploadImageToCloudinary } from '../utils/uploadImage'; 
+import { getImagePath } from '../config/constants.js';
 
 function CreateLevel() {
+  const { levelId } = useParams();
+  const navigate = useNavigate();
+  const isEditing = Boolean(levelId);
+
   // Level fields
   const [title, setTitle] = useState('');
   const [difficulty, setDifficulty] = useState('Easy');
   const [file, setFile] = useState(null);
   const [imagePreview, setImagePreview] = useState('');
+  const [existingImageFileName, setExistingImageFileName] = useState('');
 
   // Track which target object index is currently selected to receive coordinates from clicks
   const [activeTargetIndex, setActiveTargetIndex] = useState(0);
 
   // Array of search objects/targets with file & preview fields
   const [targets, setTargets] = useState([
-    { name: '', iconFile: null, iconPreview: '', targetX: '', targetY: '', radius: '3.0' }
+    { id: null, name: '', iconFile: null, iconPreview: '', iconFileName: '', targetX: '', targetY: '', radius: '3.0' }
   ]);
   
   const [loading, setLoading] = useState(false);
+
+  // Fetch existing level data if editing using URL params
+  useEffect(() => {
+    if (isEditing) {
+      setLoading(true);
+      axios.get(`${import.meta.env.VITE_API_URL}/levelcontroll/level/${levelId}`)
+        .then(res => {
+          const data = res.data;
+          setTitle(data.title || '');
+          setDifficulty(data.difficulty || 'Easy');
+          setImagePreview(getImagePath(data.imageFileName) || '');
+          setExistingImageFileName(data.imageFileName || '');
+
+          if (data.targets && data.targets.length > 0) {
+            setTargets(data.targets.map(t => ({
+              id: t.id || null,
+              name: t.name || '',
+              iconFile: null,
+              iconPreview: getImagePath(t.iconFileName) || '',
+              iconFileName: t.iconFileName || '',
+              targetX: t.targetX ?? '',
+              targetY: t.targetY ?? '',
+              radius: t.radius ?? '3.0'
+            })));
+          }
+        })
+        .catch(err => {
+          console.error('Error fetching level for edit:', err);
+          alert('Failed to load level data.');
+        })
+        .finally(() => setLoading(false));
+    }
+  }, [levelId, isEditing]);
 
   // Instant local preview for main level image
   const handleMainFileChange = (e) => {
@@ -33,19 +73,16 @@ function CreateLevel() {
     setTargets(prev => {
       const updated = [
         ...prev, 
-        { name: '', iconFile: null, iconPreview: '', targetX: '', targetY: '', radius: '3.0' }
+        { id: null, name: '', iconFile: null, iconPreview: '', iconFileName: '', targetX: '', targetY: '', radius: '3.0' }
       ];
-      setActiveTargetIndex(updated.length - 1); // Switch active focus to the new item
+      setActiveTargetIndex(updated.length - 1); 
       return updated;
     });
   };
 
   // Remove a target row and safely adjust active index
   const handleRemoveObjectField = (index) => {
-    setTargets(prev => {
-      const updated = prev.filter((_, i) => i !== index);
-      return updated;
-    });
+    setTargets(prev => prev.filter((_, i) => i !== index));
     if (activeTargetIndex >= index && activeTargetIndex > 0) {
       setActiveTargetIndex(prev => prev - 1);
     }
@@ -84,7 +121,6 @@ function CreateLevel() {
     const xPercent = ((mouseX / rect.width) * 100).toFixed(2);
     const yPercent = ((mouseY / rect.height) * 100).toFixed(2);
 
-    // Update the active target's coordinates automatically
     setTargets(prev => {
       const updated = [...prev];
       if (updated[activeTargetIndex]) {
@@ -97,7 +133,7 @@ function CreateLevel() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!file) {
+    if (!imagePreview && !file) {
       alert('Please choose a main level image file first!');
       return;
     }
@@ -105,18 +141,22 @@ function CreateLevel() {
     try {
       setLoading(true);
 
-      // 1. Upload main level image to Cloudinary
-      const imageFileName = await uploadImageToCloudinary(file);
+      // 1. Upload main level image if a new one was picked, otherwise keep existing filename
+      let imageFileName = existingImageFileName;
+      if (file) {
+        imageFileName = await uploadImageToCloudinary(file);
+      }
 
       // 2. Upload all target icon files concurrently using Promise.all
       const formattedTargets = await Promise.all(
         targets.map(async (t) => {
-          let iconFileName = '';
+          let iconFileName = t.iconFileName;
           if (t.iconFile) {
             iconFileName = await uploadImageToCloudinary(t.iconFile);
           }
 
           return {
+            id: t.id || undefined,
             name: t.name,
             iconFileName: iconFileName,
             targetX: parseFloat(t.targetX) || 0,
@@ -126,19 +166,26 @@ function CreateLevel() {
         })
       );
 
-      // 3. Send complete level structure to your backend database
-   const response =   await axios.post(`${import.meta.env.VITE_API_URL}/levelcontroll/create`, {
+      const payload = {
         title,
         difficulty,
         imageFileName,
         targets: formattedTargets
-      });
+      };
 
-      alert('Level and targets created successfully!');
-      console.log(response.data)
+      // 3. Send API Request (PUT if editing, POST if creating)
+      if (isEditing) {
+        await axios.put(`${import.meta.env.VITE_API_URL}/levelcontroll/update/${levelId}`, payload);
+        alert('Level updated successfully!');
+      } else {
+        await axios.post(`${import.meta.env.VITE_API_URL}/levelcontroll/create`, payload);
+        alert('Level created successfully!');
+      }
+
+      navigate('/'); // Redirect back home after successful save
     } catch (error) {
-      console.error('Error creating level:', error);
-      alert('Failed to create level. Check console.');
+      console.error('Error saving level:', error);
+      alert('Failed to save level. Check console.');
     } finally {
       setLoading(false);
     }
@@ -146,7 +193,7 @@ function CreateLevel() {
 
   return (
     <div className="create-level-page" style={{ padding: '2rem', maxWidth: '600px', margin: '0 auto' }}>
-      <h2>Create a New Level</h2>
+      <h2>{isEditing ? `Edit Level: ${title}` : 'Create a New Level'}</h2>
       
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
         
@@ -184,7 +231,7 @@ function CreateLevel() {
               type="file" 
               accept="image/*" 
               onChange={handleMainFileChange} 
-              required 
+              {...(!isEditing && { required: true })}
             />
           </div>
 
@@ -201,54 +248,51 @@ function CreateLevel() {
                 <img 
                   src={imagePreview} 
                   alt="Main Preview" 
-                  style={{ width: '100%', maxHeight: '300px', objectFit: 'contain', borderRadius: '4px', background: '#000' }} 
+                  style={{ width: '100%', background: '#000', display: 'block' }} 
                 />
                 
-                {/* Optional: Render visual markers on the image for all mapped targets */}
-       {/* Visual markers and radius circles for all mapped targets */}
-{targets.map((t, i) => {
-  if (!t.targetX || !t.targetY) return null;
-  
-  const isActive = i === activeTargetIndex;
-  // Use the radius field value, default to 3% if empty or invalid
-  const radiusVal = parseFloat(t.radius) || 3.0; 
+                {/* Visual markers and radius circles for all mapped targets */}
+                {targets.map((t, i) => {
+                  if (!t.targetX || !t.targetY) return null;
+                  
+                  const isActive = i === activeTargetIndex;
+                  const radiusVal = parseFloat(t.radius) || 3.0; 
 
-  return (
-    <div key={i} style={{ pointerEvents: 'none' }}>
-      {/* Outer Radius Circle */}
-      <div 
-        style={{
-          position: 'absolute',
-          left: `${t.targetX}%`,
-          top: `${t.targetY}%`,
-          // We multiply the radius value to scale nicely on the preview
-          width: `${radiusVal * 6}%`, 
-          aspectRatio: `1`,
-          backgroundColor: isActive ? 'rgba(255, 0, 85, 0.2)' : 'rgba(0, 255, 204, 0.2)',
-          border: `2px dashed ${isActive ? '#ff0055' : '#00ffcc'}`,
-          borderRadius: '50%',
-          transform: 'translate(-50%, -50%)',
-        }}
-      />
+                  return (
+                    <div key={i} style={{ pointerEvents: 'none' }}>
+                      {/* Outer Radius Circle */}
+                      <div 
+                        style={{
+                          position: 'absolute',
+                          left: `${t.targetX}%`,
+                          top: `${t.targetY}%`,
+                          width: `${radiusVal}%`, 
+                          aspectRatio: `1`,
+                          backgroundColor: isActive ? 'rgba(255, 0, 85, 0.2)' : 'rgba(0, 255, 204, 0.2)',
+                          border: `2px dashed ${isActive ? '#ff0055' : '#00ffcc'}`,
+                          borderRadius: '50%',
+                          transform: 'translate(-50%, -50%)',
+                        }}
+                      />
 
-      {/* Center Pin Dot */}
-      <div 
-        style={{
-          position: 'absolute',
-          left: `${t.targetX}%`,
-          top: `${t.targetY}%`,
-          width: '10px',
-          height: '10px',
-          backgroundColor: isActive ? '#ff0055' : '#00ffcc',
-          border: '2px solid white',
-          borderRadius: '50%',
-          transform: 'translate(-50%, -50%)',
-        }}
-        title={t.name}
-      />
-    </div>
-  );
-})}
+                      {/* Center Pin Dot */}
+                      <div 
+                        style={{
+                          position: 'absolute',
+                          left: `${t.targetX}%`,
+                          top: `${t.targetY}%`,
+                          width: '10px',
+                          height: '10px',
+                          backgroundColor: isActive ? '#ff0055' : '#00ffcc',
+                          border: '2px solid white',
+                          borderRadius: '50%',
+                          transform: 'translate(-50%, -50%)',
+                        }}
+                        title={t.name}
+                      />
+                    </div>
+                  );
+                })}
               </section>
             </div>
           )}
@@ -322,7 +366,7 @@ function CreateLevel() {
                     type="file" 
                     accept="image/*" 
                     onChange={(e) => handleTargetFileChange(index, e)} 
-                    required 
+                    {...(!target.iconPreview && { required: true })}
                   />
                   {target.iconPreview && (
                     <div style={{ marginTop: '0.4rem' }}>
@@ -381,7 +425,7 @@ function CreateLevel() {
           disabled={loading}
           style={{ padding: '0.75rem', background: '#0070f3', color: '#fff', border: 'none', borderRadius: '4px', fontSize: '1rem', cursor: 'pointer' }}
         >
-          {loading ? 'Uploading Images & Saving Level...' : 'Publish Level'}
+          {loading ? 'Processing & Saving...' : (isEditing ? 'Update Level' : 'Publish Level')}
         </button>
       </form>
     </div>

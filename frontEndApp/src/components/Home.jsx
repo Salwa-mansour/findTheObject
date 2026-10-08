@@ -22,7 +22,10 @@ function Home({ setCurrentLevel,levels,setCurrentSession }) {
     <div className="level-select">
       {levels.map(level => (
         <div key={level.id} className="level-card">
-          <img src={level.imagePath} alt="" width={400} />
+          <figure>
+            <img src={level.imagePath} alt="" width={400} />
+          </figure>
+          
           <h3>{level.title}</h3>
           <p>Difficulty: {level.difficulty}</p>
           <button onClick={() =>{setCurrentLevel(level); generateSesstion(level)} }>Start Level</button>

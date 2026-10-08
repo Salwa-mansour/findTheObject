@@ -9,7 +9,9 @@ function ObjectsList({images,foundTargets}) {
        return( 
         
          <li key={image.id}>
-            <img src={image.iconPath} alt={image.name} /> 
+              <figure>
+                <img src={image.iconPath} alt={image.name} /> 
+              </figure>
             {isFound && <span className='check-span'>✔</span>}
           </li>)
         })

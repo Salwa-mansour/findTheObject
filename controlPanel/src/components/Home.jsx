@@ -47,6 +47,7 @@ function Home() {
           <h3>{level.title}</h3>
           <p>Difficulty: {level.difficulty}</p>
           <button >level details</button>
+          <Link  to={`/createlevel/${level.id}`}>edit</Link>
         </div>
       ))}
     </div>

@@ -23,11 +23,9 @@ async function checkPointHit(req, res) {
     const { possipleTargetId, xPoint, yPoint } = req.body;
     try {   
         const target = await db.getTarget( possipleTargetId);
-            // console.log('Target:', target);
-            // console.log(`xPoint: ${xPoint}, yPoint: ${yPoint}`);
-      
+            console.log('debug')
             const distance = Math.sqrt((xPoint - target.targetX) ** 2 + (yPoint - target.targetY) ** 2); 
-            // console.log(`Calculated distance: ${distance}, Target radius: ${target.radius}`);   
+             console.log(`Calculated distance: ${distance}, Target radius: ${target.radius}`);   
             if (distance <= target.radius) {
                 return res.status(200).json({ hit: true, target: target });
             }

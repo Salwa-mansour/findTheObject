@@ -15,15 +15,33 @@ export const createNewLevel = catchAsync(async (req, res, next) => {
     });
 });
 
-// Optional: Handler to get all levels if you have it in your services
-export const getAllLevels = catchAsync(async (req, res, next) => {
-    const levels = await levelService.getLevels();
-    
+// Handler to get a single level by ID (for edit form population)
+export const getLevelById = catchAsync(async (req, res, next) => {
+    const { levelId } = req.params;
+  //  console.log("1. Controller hit with levelId:", levelId);
+
+    try {
+        const level = await levelService.findLevelById(levelId);
+       // console.log("3. Service returned level:", level);
+
+        if (!level) {
+            return res.status(404).json({ status: 'fail', message: 'Level not found' });
+        }
+
+        res.status(200).json(level);
+    } catch (err) {
+        console.error("🔥 ERROR HAPPENED INSIDE SERVICE/PRISMA:", err);
+        throw err; // Let catchAsync handle it after logging
+    }
+});
+// Handler to update an existing level
+export const updateLevel = catchAsync(async (req, res, next) => {
+    const { levelId } = req.params;
+   
+    await levelService.updateLevel(levelId, req.body);
+ 
     res.status(200).json({
         status: 'success',
-        results: levels.length,
-        data: {
-            levels
-        }
+        
     });
 });

@@ -10,7 +10,9 @@ async function getLevels() {
                     name: true,
                     iconFileName: true,
                     levelId: true,
-                   
+                    targetX: true, 
+                    targetY: true, 
+                    radius: true,  
                 }
             },
         },
@@ -33,6 +35,7 @@ async function getTarget(targetId) {
             id: targetId,
         },
     });
+  
     return target;
 }
 async function endSession(sessionId) { // Fixed spelling to 'Session'

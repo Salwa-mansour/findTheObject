@@ -18,11 +18,11 @@ function ObjectsDropdown({ images, position, show, setShow, foundTargets, setFou
             xPoint: position.x,
             yPoint: position.y
         };
-
+    console.log(data)
         axios.post(`${import.meta.env.VITE_API_URL}/checkHit`, data)
             .then(response => {
                 const { hit, target } = response.data; 
-              
+              console.log(hit,target)
                 if (hit) {
                     setFoundTargets(prev => {
                         const updatedTargets = [...prev, target];

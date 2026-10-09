@@ -19,6 +19,11 @@ function Home({ setCurrentLevel,levels,setCurrentSession }) {
     }
   }
   return (
+    <>
+    <div className='page-title'>
+         <h2>Find The Object 🔎</h2>
+    </div>
+  
     <div className="level-select">
       {levels.map(level => (
         <div key={level.id} className="level-card">
@@ -29,9 +34,10 @@ function Home({ setCurrentLevel,levels,setCurrentSession }) {
           <h3>{level.title}</h3>
           <p>Difficulty: {level.difficulty}</p>
           <button onClick={() =>{setCurrentLevel(level); generateSesstion(level)} }>Start Level</button>
-        </div>
-      ))}
-    </div>
+          </div>
+        ))}
+      </div> 
+    </>
   );
 }
 

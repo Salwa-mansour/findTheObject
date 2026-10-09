@@ -2,7 +2,6 @@ import { useState } from 'react';
 import TargetSquier from './TargetSquier';
 import ObjectsDropdown from './ObjectsDropdown';
 import ObjectsList from './ObjectsList';
-import SoundToggle from './SoundToggle';
 
 function Image1({ level, currentSession, setCurrentSession }) {
   const [coords, setCoords] = useState({ x: 0, y: 0 });
@@ -49,8 +48,8 @@ function Image1({ level, currentSession, setCurrentSession }) {
 
   return (
     <>
-      <span>-----{coords.x} , {coords.y}</span>
-      <SoundToggle/>
+      {/* <span>-----{coords.x} , {coords.y}</span> */}
+    
       <ObjectsList images={level.targets} foundTargets={foundTargets} />
      
       <section 
@@ -60,7 +59,7 @@ function Image1({ level, currentSession, setCurrentSession }) {
         onTouchStart={clickHandler} // Added explicit mobile touch support
         onMouseEnter={() => setShowCursor(true)}
         onMouseLeave={() => setShowCursor(false)}
-        style={{ position: 'relative', display: 'inline-block', width: '100%' }}
+        
       >
         <img src={level.imagePath} alt="find items" style={{ width: '100%', display: 'block' }} />
        

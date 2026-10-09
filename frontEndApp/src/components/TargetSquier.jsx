@@ -4,6 +4,7 @@ function TargetSquier({position,show}) {
     const style = {
     opacity: show ? 1 : 0.5,
     pointerEvents: 'none',
+    borderRadius:'50%',
     top: `${position?.y}%`,
     left: `${position?.x}%`,
     position: 'absolute',     // Necessary to move relative to the container

@@ -4,7 +4,8 @@ import Timer from "./Timer";
 import Image1 from "./Image1";
 import axios from "axios";
 import { formatTime } from "../utils/formatTime";
-import { Link } from "react-router";
+import SoundToggle from './SoundToggle';
+
 
 
 function GamePage({ level, currentSession, setCurrentSession, onQuit }) {
@@ -75,7 +76,7 @@ function GamePage({ level, currentSession, setCurrentSession, onQuit }) {
             </ol>
           )}
         </section>
-        <Link to='/' className="btn">play again</Link>
+        <button onClick={()=>onQuit()} className="btn">play again</button>
       </div>
     );
   }
@@ -83,7 +84,12 @@ function GamePage({ level, currentSession, setCurrentSession, onQuit }) {
   // --- RENDERING ROUTE B: ACTIVE RUNNING GAME PLAY ---
   return (
     <main className="game-page">
-      <Timer sesstion={currentSession} />
+      <header className="game-header">
+         <button onClick={()=>onQuit()} >⬅ quit </button>
+          <Timer sesstion={currentSession} />
+          <SoundToggle/>
+      </header>
+        
       {/* <ObjectsList images={level.targets} /> */}
       <Image1 
         level={level}

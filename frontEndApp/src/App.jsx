@@ -40,7 +40,7 @@ function App() {
     fetchAndProcessLevels();
   }, []);
 
-  if (loading) return <div>Loading Game...</div>;
+  if (loading) return <div>Loading Games...</div>;
 
   return (
     <>

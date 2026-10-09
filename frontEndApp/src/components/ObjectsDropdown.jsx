@@ -9,7 +9,7 @@ function ObjectsDropdown({ images, position, show, setShow, foundTargets, setFou
  const isMuted = getSoundMuted();
     const style = {
 
-        opacity: show ? 1 : 0.4,
+        opacity: show ? 1 : 0,
 
         pointerEvents: show ? 'auto' : 'none',
 

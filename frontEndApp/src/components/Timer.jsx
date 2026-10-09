@@ -37,9 +37,9 @@ function Timer({ sesstion }) {
   };
 
   return (
-    <div className="game-timer">
-      <span>⏱️ {formatTime(secondsElapsed)}</span>
-    </div>
+   
+      <time className="game-timer" >⏱️ {formatTime(secondsElapsed)}</time >
+
   );
 }
 

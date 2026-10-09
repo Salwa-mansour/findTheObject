@@ -48,13 +48,20 @@
     display: flex;
     gap: .75rem;
     justify-content: center;
-    margin: .75rem;
-    flex-wrap: wrap;
+    margin-block: .75rem;
+    width: 90%;
 }
 .objects-list li {
-    list-style: none;
+      list-style: none;
     height: 100px;
     position: relative;
+    flex: 1;
+    min-width: 0;
+    aspect-ratio: 1;
+}
+.objects-list figure {
+    height: 100%;
+    width: 100%;
 }
 .check-span{
     position: absolute;
@@ -69,15 +76,17 @@
 }
 .objects-list img {
     height: 100%;
-    width: auto;
+    width: 100%;
+    object-fit: contain;
 }
 
 .img-container {
+    position: relative;
   display: flex;
   justify-content: center;
   position: relative;
   /* display: inline-block; */
-  width: 100%;
+  width: 80%;
   max-width: 600px;
   margin: 0 auto;
 }
@@ -98,7 +107,7 @@
     top: 0;
     left: 0;
     pointer-events: none;
-    opacity: 0.5;
+   
     will-change: opacity, transform;
 }
 .object-dropdown{

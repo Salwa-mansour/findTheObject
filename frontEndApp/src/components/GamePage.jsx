@@ -4,6 +4,7 @@ import Timer from "./Timer";
 import Image1 from "./Image1";
 import axios from "axios";
 import { formatTime } from "../utils/formatTime";
+import { Link } from "react-router";
 
 function GamePage({ level, currentSession, setCurrentSession, onQuit }) {
   // 1. Properly manage the leaderboard as local React state
@@ -72,6 +73,7 @@ function GamePage({ level, currentSession, setCurrentSession, onQuit }) {
             </ol>
           )}
         </section>
+        <Link to='/' className="btn">play again</Link>
       </div>
     );
   }

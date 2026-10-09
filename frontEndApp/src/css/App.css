@@ -33,7 +33,8 @@
     left: 0;
     object-fit: cover;
 }
-.level-card button{
+.level-card button,
+.btn{
     border: none;
     padding: 1rem;
     font-weight: bold;

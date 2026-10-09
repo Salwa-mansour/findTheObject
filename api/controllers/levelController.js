@@ -67,8 +67,9 @@ async function sesstionPalyerName(req, res) {
     }
 }
 async function leaderboard(req, res) {
+    const {levelId} = req.params;
     try { 
-        const leaderboardData = await db.leaderboard();
+        const leaderboardData = await db.leaderboard(levelId);
         res.status(200).json(leaderboardData);
     } catch (error) {
         console.error('Error fetching leaderboard:', error);

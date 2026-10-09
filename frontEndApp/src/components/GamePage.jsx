@@ -6,6 +6,7 @@ import axios from "axios";
 import { formatTime } from "../utils/formatTime";
 import { Link } from "react-router";
 
+
 function GamePage({ level, currentSession, setCurrentSession, onQuit }) {
   // 1. Properly manage the leaderboard as local React state
   const [leaderboard, setLeaderboard] = useState([]);
@@ -17,8 +18,9 @@ function GamePage({ level, currentSession, setCurrentSession, onQuit }) {
   // 2. Fetch the data inside a clean side-effect hook triggered on game over
   useEffect(() => {
     if (isGameOver) {
+       
       setLoadingLeaderboard(true);
-      axios.get(`${import.meta.env.VITE_API_URL}/leaderboard`)
+      axios.get(`${import.meta.env.VITE_API_URL}/leaderboard/${level.id}`)
         .then(response => {
           console.log('Leaderboard data:', response.data);
           setLeaderboard(response.data);

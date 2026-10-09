@@ -86,18 +86,19 @@ async function sesstionPalyerName(sessionId, playerName) {
     }
 }
 
-async function leaderboard() {
+async function leaderboard(levelId) {
     try {
         const leaderboardData = await prisma.PlayerSession.findMany({
             where: {
                 playerName: {
                     not: null, // Only include sessions where playerName is set
                 },
+                levelId :levelId
             },
             orderBy: {
                 finalTimeSeconds: 'asc', // Assuming you want the fastest times at the top
             },
-            take: 10, // Limit to top 10 entries
+         //   take: 10, // Limit to top 10 entries
         });
         return leaderboardData;
     } catch (error) {

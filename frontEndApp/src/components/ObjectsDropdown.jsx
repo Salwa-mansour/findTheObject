@@ -1,11 +1,12 @@
 import axios from "axios";
 
 import { formatTime } from '../utils/formatTime.js';
+import { getSoundMuted ,playHitSound,playWinSound} from '../utils/sound.js';
 
 
 
 function ObjectsDropdown({ images, position, show, setShow, foundTargets, setFoundTargets, currentSession, setCurrentSession }) {
-
+ const isMuted = getSoundMuted();
     const style = {
 
         opacity: show ? 1 : 0.4,
@@ -42,6 +43,9 @@ function ObjectsDropdown({ images, position, show, setShow, foundTargets, setFou
                 const { hit, target } = response.data; 
                 console.log(hit, target);
                 if (hit) {
+                    if(!isMuted){
+                        playHitSound();
+                    }
                     setFoundTargets(prev => {
                         const updatedTargets = [...prev, target];
                         
@@ -66,7 +70,9 @@ function ObjectsDropdown({ images, position, show, setShow, foundTargets, setFou
     // Switched to async/await syntax for cleaner nested API call handling
 
     async function handleWin(sessionId) {
-
+         if(!isMuted){
+          playWinSound()
+        }
         try {
 
             // 1. Tell backend to stop the clock and record the end time

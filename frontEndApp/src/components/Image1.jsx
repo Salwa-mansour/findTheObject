@@ -36,6 +36,9 @@ function Image1({ level, currentSession, setCurrentSession }) {
   }
 
   function clickHandler(e) {
+       if (e) {
+            e.stopPropagation();
+        }
     // If the user clicked directly inside the dropdown menu, do nothing here!
     if (e.target.closest('.object-dropdown')) {
       return;
@@ -45,37 +48,45 @@ function Image1({ level, currentSession, setCurrentSession }) {
     setDropDownPosition({ x, y });
     setShowDropdown(true);
   }
-
+function spacerClick(e){
+  console.log('spacer clicked')
+   if (e.target.closest('.img-container')) {
+      return;
+    }
+    setShowDropdown(false)
+    setDropDownPosition({ x: 0, y: 0 })
+}
   return (
     <>
       {/* <span>-----{coords.x} , {coords.y}</span> */}
     
       <ObjectsList images={level.targets} foundTargets={foundTargets} />
-     
-      <section 
-        className="img-container"
-        onMouseMove={mouseMoveHandler}
-        onClick={clickHandler}
-        onTouchStart={clickHandler} // Added explicit mobile touch support
-        onMouseEnter={() => setShowCursor(true)}
-        onMouseLeave={() => setShowCursor(false)}
+     <div className='image-spacer' onClick={spacerClick} onTouchStart={spacerClick}>
+        <section 
+          className="img-container"
+          onMouseMove={mouseMoveHandler}
+          onClick={clickHandler}
+          onTouchStart={clickHandler} // Added explicit mobile touch support
+          onMouseEnter={() => setShowCursor(true)}
+          onMouseLeave={() => setShowCursor(false)}
+          
+        >
+          <img src={level.imagePath} alt="find items" style={{ width: '100%', display: 'block' }} />
         
-      >
-        <img src={level.imagePath} alt="find items" style={{ width: '100%', display: 'block' }} />
-       
-        <TargetSquier position={coords} show={showCursor} />
-       
-        <ObjectsDropdown
-          images={level.targets}
-          position={dropDownPosition} 
-          show={showDropdown}
-          setShow={setShowDropdown}
-          foundTargets={foundTargets}
-          setFoundTargets={setFoundTargets}
-          currentSession={currentSession}
-          setCurrentSession={setCurrentSession} 
-        />
-      </section>
+          <TargetSquier position={coords} show={showCursor} />
+        
+          <ObjectsDropdown
+            images={level.targets}
+            position={dropDownPosition} 
+            show={showDropdown}
+            setShow={setShowDropdown}
+            foundTargets={foundTargets}
+            setFoundTargets={setFoundTargets}
+            currentSession={currentSession}
+            setCurrentSession={setCurrentSession} 
+          />
+        </section>
+      </div>
     </>
   );
 }

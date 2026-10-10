@@ -112,10 +112,10 @@
 }
 .object-dropdown{
     position: absolute;
-    /* width: 20vw; */
+    width: 100px;
     top: 0;
     left: 0;
-    max-width: 100px;
+  
     background: wheat;
     display: flex;
     flex-wrap: wrap;

@@ -114,8 +114,6 @@
 .object-dropdown{
     position: absolute;
     width: 100px;
-    top: 0;
-    left: 0;
   
     background: wheat;
     display: flex;

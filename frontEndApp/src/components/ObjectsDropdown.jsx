@@ -8,7 +8,7 @@ import { getSoundMuted ,playHitSound,playWinSound} from '../utils/sound.js';
 function ObjectsDropdown({ images, position, show, setShow, foundTargets, setFoundTargets, currentSession, setCurrentSession }) {
  const isMuted = getSoundMuted();
     const style = {
-
+        display:show ? "flex": "none" ,
         opacity: show ? 1 : 0,
 
         pointerEvents: show ? 'auto' : 'none',
@@ -16,9 +16,9 @@ function ObjectsDropdown({ images, position, show, setShow, foundTargets, setFou
         top: `${position.y}%`,  
 
         left: `${position.x}%`,
-
-        transform: 'translate(0,1.5rem)',
-
+    //  edge-detection transforms:
+        // If x > 75%, shift left (-100%). If y > 75%, shift up (-100%). Otherwise, default layout.
+        transform: `translate(${position.x > 75 ? '-100%' : '0px'}, ${position.y > 75 ? '-100%' : '1.5rem'})`,
         zIndex: 20,
 
     };
@@ -26,8 +26,13 @@ function ObjectsDropdown({ images, position, show, setShow, foundTargets, setFou
 
 
    function handleClick(targetId, e) {
+    console.log({show})
+      if(!show){
+        console.log('hidden')
+        return;
+      }
         // Prevent click from bubbling up to the image container wrapper
-        if (e && show) {
+        if (e ) {
             e.stopPropagation();
         }
 
@@ -36,12 +41,11 @@ function ObjectsDropdown({ images, position, show, setShow, foundTargets, setFou
             xPoint: position.x,
             yPoint: position.y
         };
-        console.log(data);
-
+       
         axios.post(`${import.meta.env.VITE_API_URL}/checkHit`, data)
             .then(response => {
                 const { hit, target } = response.data; 
-                console.log(hit, target);
+     
                 if (hit) {
                     if(!isMuted){
                         playHitSound();

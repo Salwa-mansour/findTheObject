@@ -10,10 +10,12 @@ function Image1({ level, currentSession, setCurrentSession }) {
   const [showCursor, setShowCursor] = useState(false);
   const [foundTargets, setFoundTargets] = useState([]);
 
+
   // Helper to extract clean coordinates supporting both mouse and mobile touch
   const calculatePercentages = (e) => {
     const container = e.currentTarget;
     const img = container.querySelector('img');
+  
     const rect = img.getBoundingClientRect(); // Always measure the actual image bounds!
 
     // Fallback for mobile touches vs desktop mouse clicks
@@ -40,7 +42,7 @@ function Image1({ level, currentSession, setCurrentSession }) {
             e.stopPropagation();
         }
     // If the user clicked directly inside the dropdown menu, do nothing here!
-    if (e.target.closest('.object-dropdown') && showDropdown) {
+    if (e.target.closest('.object-dropdown') ) {
       return;
     }
     const { x, y } = calculatePercentages(e);
@@ -49,7 +51,7 @@ function Image1({ level, currentSession, setCurrentSession }) {
     setShowDropdown(true);
   }
 function spacerClick(e){
-  console.log('spacer clicked')
+ 
    if (e.target.closest('.img-container')) {
       return;
     }

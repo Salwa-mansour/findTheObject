@@ -27,7 +27,7 @@ function ObjectsDropdown({ images, position, show, setShow, foundTargets, setFou
 
    function handleClick(targetId, e) {
         // Prevent click from bubbling up to the image container wrapper
-        if (e) {
+        if (e && show) {
             e.stopPropagation();
         }
 

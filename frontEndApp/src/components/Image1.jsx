@@ -40,7 +40,7 @@ function Image1({ level, currentSession, setCurrentSession }) {
             e.stopPropagation();
         }
     // If the user clicked directly inside the dropdown menu, do nothing here!
-    if (e.target.closest('.object-dropdown')) {
+    if (e.target.closest('.object-dropdown') && showDropdown) {
       return;
     }
     const { x, y } = calculatePercentages(e);

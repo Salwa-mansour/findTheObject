@@ -45,6 +45,7 @@
 }
 /* ============================ */
 .objects-list {
+    max-width: 600px;
     display: flex;
     gap: .75rem;
     justify-content: center;
